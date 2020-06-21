@@ -36,6 +36,7 @@ class UserService extends Service {
   }
 
   async register(phoneNumber, password) {
+    password = encrypt('md5', password);
     const result = await this.ctx.app.mysql.insert('user', {
       phone_number: phoneNumber,
       password,
