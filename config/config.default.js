@@ -38,12 +38,19 @@ module.exports = appInfo => {
     cors: {
       origin: '*',
       allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+      credentials: true,
     },
     security: {
       csrf: {
         enable: false, // 暂时禁用掉 csrf，错误信息：403 missing csrf token
       },
     },
+    // session: {
+    //   key: 'EGG_SESS',
+    //   maxAge: 7 * 24 * 3600 * 1000, // 7 天
+    //   httpOnly: true,
+    //   encrypt: true,
+    // },
   };
 
   return {

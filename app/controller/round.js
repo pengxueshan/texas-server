@@ -62,21 +62,9 @@ class RoundController extends Controller {
     const { ctx } = this;
     const reqData = ctx.request.body;
     const { id, date, leverage, players } = reqData;
-    const roundResult = await ctx.service.round.update({ id, date, leverage });
-    const infoResult = await ctx.service.roundPlayerInfo.update(players.map(info => {
-      return {
-        row: {
-          amount: +info.amount,
-        },
-        where: {
-          round_id: id,
-          player_id: info.playerId,
-        },
-      };
-    }));
-    if (roundResult.affectedRows > 0 && infoResult.affectedRows > 0) {
-      ctx.status = 200;
-    }
+    await ctx.service.round.update({ id, date, leverage });
+    await ctx.service.roundPlayerInfo.update(players, id);
+    ctx.status = 200;
   }
 }
 

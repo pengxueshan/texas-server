@@ -36,8 +36,24 @@ class RoundPlayerInfoService extends Service {
     }
   }
 
-  async update(infos) {
-    return await this.ctx.app.mysql.updateRows('round_player_info', infos);
+  async update(infos, roundId) {
+    for (let i = 0; i < infos.length; i++) {
+      const info = infos[i];
+      let data = {
+        amount: +info.amount,
+      };
+      const result = await this.ctx.app.mysql.update('round_player_info', data, {
+        where: { round_id: roundId, player_id: info.playerId },
+      });
+      if (result.affectedRows < 1) {
+        data = {
+          ...data,
+          round_id: roundId,
+          player_id: info.playerId,
+        };
+        await this.ctx.app.mysql.insert('round_player_info', data);
+      }
+    }
   }
 }
 
