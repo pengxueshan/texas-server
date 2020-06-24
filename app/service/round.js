@@ -8,7 +8,9 @@ class RoundService extends Service {
   }
 
   async rounds() {
-    return await this.ctx.app.mysql.select('round');
+    return await this.ctx.app.mysql.select('round', {
+      orders: [['id', 'asc']],
+    });
   }
 
   async addRound({ date, leverage }) {
@@ -30,6 +32,14 @@ class RoundService extends Service {
         },
       };
     }
+  }
+
+  async update({ id, date, leverage }) {
+    return await this.ctx.app.mysql.update('round', {
+      id,
+      date,
+      leverage,
+    });
   }
 }
 

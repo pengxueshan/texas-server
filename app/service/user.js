@@ -17,18 +17,24 @@ class UserService extends Service {
       phoneNumber
     );
     if (user.length < 1) {
-      await this.register(phoneNumber, password);
+      this.ctx.status = 400;
+      this.ctx.body = {
+        message: 'phone number or password error',
+        status: 1001,
+      };
+      // await this.register(phoneNumber, password);
     } else {
-      if (user.password === password) {
+      if (user[0].password === password) {
         this.ctx.body = {
           data: {
-            phoneNumber: user.phone_number,
+            phoneNumber: user[0].phone_number,
           },
         };
         this.ctx.status = 200;
       } else {
+        this.ctx.status = 400;
         this.ctx.body = {
-          message: 'password error',
+          message: 'phone number or password error',
           status: 1001,
         };
       }

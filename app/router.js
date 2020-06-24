@@ -13,7 +13,8 @@ module.exports = app => {
   // round
   router.post('/addRound', controller.round.addRound);
   router.post('/rounds', controller.round.rounds);
-  router.post('/roundDetails', controller.round.rounds);
+  router.post('/roundDetails', controller.round.roundDetails);
+  router.post('/updateRound', controller.round.updateRound);
 
   router.post('/ranklist', controller.home.ranklist);
 };

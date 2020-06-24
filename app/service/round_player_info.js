@@ -35,6 +35,10 @@ class RoundPlayerInfoService extends Service {
       };
     }
   }
+
+  async update(infos) {
+    return await this.ctx.app.mysql.updateRows('round_player_info', infos);
+  }
 }
 
 module.exports = RoundPlayerInfoService;

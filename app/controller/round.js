@@ -38,11 +38,45 @@ class RoundController extends Controller {
     const { ctx } = this;
     const rounds = await ctx.service.round.rounds();
     const infos = await ctx.service.roundPlayerInfo.roundPlayerInfos();
-    
+    const ret = rounds.map(r => {
+      const players = infos.filter(i => i.round_id === r.id).map(d => {
+        return {
+          id: d.id,
+          amount: d.amount,
+          roundId: d.round_id,
+          playerId: d.player_id,
+        };
+      });
+      return {
+        ...r,
+        players,
+      };
+    });
     ctx.status = 200;
     ctx.body = {
-      data: rounds,
+      data: ret,
     };
+  }
+
+  async updateRound() {
+    const { ctx } = this;
+    const reqData = ctx.request.body;
+    const { id, date, leverage, players } = reqData;
+    const roundResult = await ctx.service.round.update({ id, date, leverage });
+    const infoResult = await ctx.service.roundPlayerInfo.update(players.map(info => {
+      return {
+        row: {
+          amount: +info.amount,
+        },
+        where: {
+          round_id: id,
+          player_id: info.playerId,
+        },
+      };
+    }));
+    if (roundResult.affectedRows > 0 && infoResult.affectedRows > 0) {
+      ctx.status = 200;
+    }
   }
 }
 
